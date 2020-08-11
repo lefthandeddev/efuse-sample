@@ -3,6 +3,6 @@ import { render } from "@testing-library/react";
 import App from ".";
 
 test("displays hello efuse", () => {
-  const { getByText } = render(<App />);
-  getByText("Hello, eFuse!");
+    const { getByText } = render(<App />);
+    getByText("Hello, eFuse!");
 });
