@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { GlobalStyle, PostCard, FlexContainer } from "../components";
-import styled, { ThemeProvider } from "styled-components";
-import { theme } from "../theme";
+import { PostCard, FlexContainer } from "../components";
+import styled from "styled-components";
 import { fetchPosts, Post } from "../api/postApi";
 
 const StyledApp = styled.div`
-    max-width: ${({ theme }) => theme.breakpoints.md};
+    max-width: ${({ theme }) => {
+        return theme.breakpoints.md;
+    }};
     margin-left: auto;
     margin-right: auto;
     box-sizing: border-box;
@@ -39,16 +40,13 @@ const App = (): JSX.Element => {
     });
 
     return (
-        <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <StyledApp>
-                <FlexContainer direction="column">
-                    {posts.map((post, index) => (
-                        <PostCard post={post} key={index} />
-                    ))}
-                </FlexContainer>
-            </StyledApp>
-        </ThemeProvider>
+        <StyledApp>
+            <FlexContainer direction="column">
+                {posts.map((post, index) => (
+                    <PostCard post={post} key={index} />
+                ))}
+            </FlexContainer>
+        </StyledApp>
     );
 };
 

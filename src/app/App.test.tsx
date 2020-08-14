@@ -1,5 +1,5 @@
 import React from "react";
-import { render, waitFor } from "@testing-library/react";
+import { render, waitFor } from "test-utils";
 import App from ".";
 import { fetchPosts, Post } from "../api/postApi";
 jest.mock("../api/postApi");

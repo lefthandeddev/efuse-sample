@@ -6,6 +6,7 @@ import { theme } from "../../theme";
 import styled from "styled-components";
 import { Post } from "../../api/postApi";
 import date from "../../utils/date-utils";
+import pluralize from "pluralize";
 
 export interface PostCardProps {
     post: Post;
@@ -100,9 +101,21 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
                                     : theme.colors.grayLight,
                             }}
                         >
-                            {likes} Likes
+                            {`${likes} ${pluralize("Like", likes)}`}
                         </span>
-                        &nbsp;•&nbsp;{comments.length} Comments
+                        &nbsp;•&nbsp;
+                        <span
+                            style={{
+                                color: comments.length
+                                    ? "inherit"
+                                    : theme.colors.grayLight,
+                            }}
+                        >
+                            {`${comments.length} ${pluralize(
+                                "Comment",
+                                comments.length
+                            )}`}
+                        </span>
                     </div>
                 </GridItem>
             </GridContainer>

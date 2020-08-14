@@ -12,8 +12,8 @@ interface GridItemProps {
 const GridItem = styled.div<GridItemProps>`
     grid-column-start: ${({ colStart }) => colStart || "auto"};
     grid-row-start: ${({ rowStart }) => rowStart || "auto"};
-    grid-column-end: ${({ colSpan }) => `span ${colSpan}` || "auto"};
-    grid-row-end: ${({ rowSpan }) => `span ${rowSpan}` || "auto"};
+    grid-column-end: ${({ colSpan }) => (colSpan ? `span ${colSpan}` : "auto")};
+    grid-row-end: ${({ rowSpan }) => (rowSpan ? `span ${rowSpan}` : "auto")};
     justify-self: ${({ justify }) => justify || "stretch"};
     align-self: ${({ align }) => align || "stretch"};
 `;

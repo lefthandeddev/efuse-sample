@@ -1,7 +1,8 @@
-import { formatDistanceToNow } from "date-fns";
+import moment from "moment";
 
 const fromNow = (date: Date): string => {
-    return formatDistanceToNow(date, { addSuffix: true });
+    const dateMoment = moment(date);
+    return dateMoment.fromNow();
 };
 
 export default { fromNow };
