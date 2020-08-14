@@ -31,7 +31,10 @@ const App = (): JSX.Element => {
     }, [fetchPosts]);
 
     const handleOnLike = (postId: number) => {
-        console.log(postId);
+        const updatedPosts = posts.map(post =>
+            post.id === postId ? { ...post, likes: post.likes + 1 } : post
+        );
+        setPosts(updatedPosts);
     };
 
     return (
