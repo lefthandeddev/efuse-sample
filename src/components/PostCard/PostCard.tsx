@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
-import { FlexContainer, Card } from "..";
+import { GridContainer, GridItem, Card } from "..";
 import { theme } from "../../theme";
 import styled from "styled-components";
 import { Post } from "../../api/postApi";
@@ -40,18 +40,29 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
     }, [fromNow]);
     return (
         <StyledPostCard>
-            <FlexContainer>
-                <img
-                    src={user.avatar}
-                    style={{
-                        borderRadius: "50%",
-                        width: "8rem",
-                        height: "8rem",
-                        marginRight: "1rem",
-                    }}
-                />
-                <FlexContainer direction="column" justify="space-around">
+            <GridContainer
+                rows={["auto"]}
+                cols={["8rem", "auto"]}
+                justify="start"
+                align="center"
+                colGap="10px"
+            >
+                <GridItem rowSpan={3}>
+                    <img
+                        src={user.avatar}
+                        style={{
+                            borderRadius: "50%",
+                            width: "8rem",
+                            height: "8rem",
+                            marginRight: "1rem",
+                        }}
+                    />
+                </GridItem>
+
+                <GridItem align="end">
                     <h1 style={{ fontSize: "2.4rem" }}>{user.name}</h1>
+                </GridItem>
+                <GridItem align="center">
                     <div
                         style={{
                             color: theme.colors.blue,
@@ -64,6 +75,9 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
                         />
                         {user.location}
                     </div>
+                </GridItem>
+
+                <GridItem align="start">
                     <div
                         style={{
                             color: theme.colors.gray,
@@ -72,19 +86,26 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
                     >
                         {fromNow}
                     </div>
-                </FlexContainer>
-            </FlexContainer>
-            <p>{message}</p>
-            <div style={{ color: theme.colors.gray }}>
-                <span
-                    style={{
-                        color: likes ? "inherit" : theme.colors.grayLight,
-                    }}
-                >
-                    {likes} Likes
-                </span>
-                &nbsp;•&nbsp;{comments.length} Comments
-            </div>
+                </GridItem>
+
+                <GridItem colSpan={2}>
+                    <p>{message}</p>
+                </GridItem>
+                <GridItem colSpan={2}>
+                    <div style={{ color: theme.colors.gray }}>
+                        <span
+                            style={{
+                                color: likes
+                                    ? "inherit"
+                                    : theme.colors.grayLight,
+                            }}
+                        >
+                            {likes} Likes
+                        </span>
+                        &nbsp;•&nbsp;{comments.length} Comments
+                    </div>
+                </GridItem>
+            </GridContainer>
         </StyledPostCard>
     );
 };
