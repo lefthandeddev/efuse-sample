@@ -37,7 +37,7 @@ const App = (): JSX.Element => {
         };
 
         fetchData();
-    });
+    }, [fetchPosts]);
 
     return (
         <StyledApp>

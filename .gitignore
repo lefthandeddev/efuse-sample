@@ -3,3 +3,5 @@ dist
 .cache
 coverage
 .eslintcache
+# Local Netlify folder
+.netlify

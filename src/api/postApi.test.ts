@@ -1,7 +1,9 @@
+jest.mock("axios");
+
 import { fetchPosts, Post } from "./postApi";
+import axios from "axios";
 
 test("test", async () => {
-    const actual = await fetchPosts();
     const expected: Post[] = [
         {
             id: 1,
@@ -54,5 +56,8 @@ test("test", async () => {
             },
         },
     ];
+
+    (axios.post as jest.Mock).mockResolvedValue({ data: expected });
+    const actual = await fetchPosts();
     expect(actual).toEqual(expected);
 });

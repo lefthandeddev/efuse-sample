@@ -1,4 +1,4 @@
-import * as data from "../sampleData.json";
+import axios from "axios";
 
 export interface Post {
     id: number;
@@ -26,46 +26,10 @@ export interface User {
     profession?: string;
 }
 
-const processPost = (post: {
-    id: number;
-    userId: number;
-    message: string;
-    likes: number;
-    comments: {
-        userId: number;
-        message: string;
-        likes: number;
-        creationDate: string;
-    }[];
-    creationDate: string;
-}) => {
-    const postUser = data.users.find(user => user.id === post.userId);
-    const comments = post.comments.map(processComment);
-    return {
-        ...post,
-        ...{
-            user: postUser,
-            comments: comments,
-            creationDate: new Date(post.creationDate),
-        },
-    } as Post;
-};
+export const fetchPosts = async (): Promise<Post[]> => {
+    const response = await axios.post(
+        `${process.env.URL || "http://localhost:8888"}/.netlify/functions/posts`
+    );
 
-const processComment = (comment: {
-    userId: number;
-    message: string;
-    likes: number;
-    creationDate: string;
-}) => {
-    const commentUser = data.users.find(user => user.id === comment.userId);
-    return {
-        ...comment,
-        ...{
-            user: commentUser,
-            creationDate: new Date(comment.creationDate),
-        },
-    };
+    return response.data;
 };
-
-export const fetchPosts = async (): Promise<Post[]> =>
-    Promise.resolve(data.posts.map(processPost));
