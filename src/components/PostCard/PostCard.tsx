@@ -1,6 +1,10 @@
 import React, { FC, useState, useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapMarkerAlt, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import {
+    faMapMarkerAlt,
+    faEllipsisH,
+    faHeart,
+} from "@fortawesome/free-solid-svg-icons";
 import {
     GridContainer,
     GridItem,
@@ -16,6 +20,7 @@ import pluralize from "pluralize";
 
 export interface PostCardProps {
     post: Post;
+    onLike: (postId: number) => void;
 }
 
 const StyledPostCard = styled(Card)`
@@ -24,8 +29,8 @@ const StyledPostCard = styled(Card)`
     }
 `;
 
-const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
-    const { user, message, likes, comments, creationDate } = post;
+const PostCard: FC<PostCardProps> = ({ post, onLike }): JSX.Element => {
+    const { user, message, likes, comments, creationDate, id } = post;
 
     let [fromNow, setFromNow] = useState(date.fromNow(creationDate));
 
@@ -113,11 +118,44 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
                     <FontAwesomeIcon icon={faEllipsisH} />
                 </GridItem>
                 <GridItem colStart={1} colSpan={3}>
-                    <FlexContainer direction="column" gap={2}>
-                        {comments.map((comment, index) => (
-                            <CommentDisplay comment={comment} key={index} />
-                        ))}
-                    </FlexContainer>
+                    <div
+                        style={{
+                            backgroundColor: themeContext.colors.light,
+                            margin: "2rem -2rem -2rem -2rem",
+                            padding: "0 2rem 2rem 2rem",
+                            borderBottomLeftRadius: themeContext.borderRadius,
+                            borderBottomRightRadius: themeContext.borderRadius,
+                            borderTop: `1px solid #d7d7d7`,
+                        }}
+                    >
+                        <FlexContainer direction="column" gap={2}>
+                            <div>
+                                <button
+                                    style={{
+                                        background: "none",
+                                        border: "none",
+                                        margin: 0,
+                                        padding: 0,
+                                        cursor: "pointer",
+                                        fontSize: "2rem",
+                                        color: themeContext.colors.gray,
+                                    }}
+                                    onClick={() => {
+                                        onLike(id);
+                                    }}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faHeart}
+                                        style={{ marginRight: "8px" }}
+                                    />
+                                    Like
+                                </button>
+                            </div>
+                            {comments.map((comment, index) => (
+                                <CommentDisplay comment={comment} key={index} />
+                            ))}
+                        </FlexContainer>
+                    </div>
                 </GridItem>
             </GridContainer>
         </StyledPostCard>

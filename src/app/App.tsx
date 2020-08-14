@@ -30,11 +30,15 @@ const App = (): JSX.Element => {
         fetchData();
     }, [fetchPosts]);
 
+    const handleOnLike = (postId: number) => {
+        console.log(postId);
+    };
+
     return (
         <StyledApp>
             <FlexContainer direction="column" gap={2}>
                 {posts.map((post, index) => (
-                    <PostCard post={post} key={index} />
+                    <PostCard post={post} onLike={handleOnLike} key={index} />
                 ))}
             </FlexContainer>
         </StyledApp>
