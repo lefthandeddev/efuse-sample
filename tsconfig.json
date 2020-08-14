@@ -5,6 +5,11 @@
         "lib": ["ES2015", "DOM"],
         "jsx": "react",
         "rootDir": "./src",
+        "baseUrl": ".",
+        "paths": {
+            "~*": ["./src/*"],
+            "test-utils": ["src/utils/test-utils"]
+        },
         "strict": true,
         "noImplicitAny": true,
         "noImplicitThis": true,
