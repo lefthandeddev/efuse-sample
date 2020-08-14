@@ -38,7 +38,7 @@ const CommentDisplay: FC<CommentDisplayProps> = ({ comment }): JSX.Element => {
             </GridItem>
             <GridItem>
                 <StyledCommentCard>
-                    <GridContainer cols={["auto", "auto"]} rowGap="6px">
+                    <GridContainer cols={["auto", "auto"]}>
                         <GridItem>
                             <div style={{ fontSize: "2rem" }}>{user.name}</div>
                         </GridItem>
@@ -62,7 +62,9 @@ const CommentDisplay: FC<CommentDisplayProps> = ({ comment }): JSX.Element => {
                                 {fromNow}
                             </div>
                         </GridItem>
-                        <GridItem rowStart={3}>{message}</GridItem>
+                        <GridItem rowStart={3}>
+                            <p>{message}</p>
+                        </GridItem>
                         <GridItem rowStart={4} align="end">
                             <div style={{ color: themeContext.colors.gray }}>
                                 <span

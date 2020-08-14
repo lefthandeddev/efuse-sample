@@ -22,12 +22,6 @@ const StyledPostCard = styled(Card)`
     p {
         margin: 1rem 0;
     }
-
-    @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
-        p {
-            margin: 2rem 0;
-        }
-    }
 `;
 
 const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
