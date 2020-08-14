@@ -107,7 +107,7 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
                         </span>
                     </div>
                 </GridItem>
-                <GridItem colStart={3} rowStart={2}>
+                <GridItem colStart={3} rowStart={2} justify="end">
                     <FontAwesomeIcon icon={faEllipsisH} />
                 </GridItem>
             </GridContainer>

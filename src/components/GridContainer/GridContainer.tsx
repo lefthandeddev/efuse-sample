@@ -11,12 +11,12 @@ interface GridContainerProps {
 
 const GridContainer = styled.div<GridContainerProps>`
     display: grid;
-    grid-template-columns: ${({ cols }) => cols?.join(" ") || "auto"};
-    grid-template-rows: ${({ rows }) => rows?.join(" ") || "auto"};
-    justify-items: ${({ justify }) => justify || "stretch"};
-    align-items: ${({ align }) => align || "stretch"};
-    column-gap: ${({ colGap }) => colGap || "0"};
-    row-gap: ${({ rowGap }) => rowGap || "0"};
+    grid-template-columns: ${({ cols = ["auto"] }) => cols.join(" ")};
+    grid-template-rows: ${({ rows = ["auto"] }) => rows.join(" ")};
+    justify-items: ${({ justify = "stretch" }) => justify};
+    align-items: ${({ align = "stretch" }) => align};
+    column-gap: ${({ colGap = "0" }) => colGap};
+    row-gap: ${({ rowGap = "0 " }) => rowGap};
 `;
 
 export default GridContainer;

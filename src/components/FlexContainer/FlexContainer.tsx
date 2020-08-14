@@ -14,9 +14,9 @@ interface FlexContainerProps {
 
 const FlexContainer = styled.div<FlexContainerProps>`
     display: flex;
-    flex-direction: ${({ direction }) => direction || "row"};
-    justify-content: ${({ justify }) => justify || "flex-start"};
-    align-items: ${({ alignItems }) => alignItems || "stretch"};
+    flex-direction: ${({ direction = "row" }) => direction};
+    justify-content: ${({ justify = "flex-start" }) => justify};
+    align-items: ${({ alignItems = "stretch" }) => alignItems};
 `;
 
 export default FlexContainer;

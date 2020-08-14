@@ -10,12 +10,14 @@ interface GridItemProps {
 }
 
 const GridItem = styled.div<GridItemProps>`
-    grid-column-start: ${({ colStart }) => colStart || "auto"};
-    grid-row-start: ${({ rowStart }) => rowStart || "auto"};
-    grid-column-end: ${({ colSpan }) => (colSpan ? `span ${colSpan}` : "auto")};
-    grid-row-end: ${({ rowSpan }) => (rowSpan ? `span ${rowSpan}` : "auto")};
-    justify-self: ${({ justify }) => justify || "stretch"};
-    align-self: ${({ align }) => align || "stretch"};
+    grid-column-start: ${({ colStart = "auto" }) => colStart};
+    grid-row-start: ${({ rowStart = "auto" }) => rowStart};
+    grid-column-end: ${({ colSpan = "auto" }) =>
+        colSpan === "auto" ? colSpan : `span ${colSpan}`};
+    grid-row-end: ${({ rowSpan = "auto" }) =>
+        rowSpan === "auto" ? rowSpan : `span ${rowSpan}`};
+    justify-self: ${({ justify = "stretch" }) => justify};
+    align-self: ${({ align = "stretch" }) => align};
 `;
 
 export default GridItem;
