@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
-import { GridContainer, GridItem, Card } from "..";
+import { faMapMarkerAlt, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import { GridContainer, GridItem, Card, Avatar } from "..";
 import { theme } from "../../theme";
 import styled from "styled-components";
 import { Post } from "../../api/postApi";
@@ -43,27 +43,18 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
         <StyledPostCard>
             <GridContainer
                 rows={["auto"]}
-                cols={["8rem", "auto"]}
+                cols={["8rem", "auto", "auto"]}
                 justify="start"
                 align="center"
                 colGap="10px"
             >
                 <GridItem rowSpan={3}>
-                    <img
-                        src={user.avatar}
-                        style={{
-                            borderRadius: "50%",
-                            width: "8rem",
-                            height: "8rem",
-                            marginRight: "1rem",
-                        }}
-                    />
+                    <Avatar src={user.avatar} />
                 </GridItem>
-
-                <GridItem align="end">
+                <GridItem colStart={2} align="end">
                     <h1 style={{ fontSize: "2.4rem" }}>{user.name}</h1>
                 </GridItem>
-                <GridItem align="center">
+                <GridItem colStart={2} align="center">
                     <div
                         style={{
                             color: theme.colors.blue,
@@ -77,8 +68,7 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
                         {user.location}
                     </div>
                 </GridItem>
-
-                <GridItem align="start">
+                <GridItem colStart={2} align="start">
                     <div
                         style={{
                             color: theme.colors.gray,
@@ -88,7 +78,6 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
                         {fromNow}
                     </div>
                 </GridItem>
-
                 <GridItem colSpan={2}>
                     <p>{message}</p>
                 </GridItem>
@@ -117,6 +106,9 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
                             )}`}
                         </span>
                     </div>
+                </GridItem>
+                <GridItem colStart={3} rowStart={2}>
+                    <FontAwesomeIcon icon={faEllipsisH} />
                 </GridItem>
             </GridContainer>
         </StyledPostCard>

@@ -15,3 +15,6 @@ export * from "./GridContainer";
 
 export { default as GridItem } from "./GridItem";
 export * from "./GridItem";
+
+export { default as Avatar } from "./Avatar";
+export * from "./Avatar";
