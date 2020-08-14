@@ -18,3 +18,6 @@ export * from "./GridItem";
 
 export { default as Avatar } from "./Avatar";
 export * from "./Avatar";
+
+export { default as CommentDisplay } from "./CommentDisplay";
+export * from "./CommentDisplay";

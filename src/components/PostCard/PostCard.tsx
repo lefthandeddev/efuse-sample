@@ -1,9 +1,15 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
-import { GridContainer, GridItem, Card, Avatar } from "..";
-import { theme } from "../../theme";
-import styled from "styled-components";
+import {
+    GridContainer,
+    GridItem,
+    Card,
+    Avatar,
+    FlexContainer,
+    CommentDisplay,
+} from "..";
+import styled, { ThemeContext } from "styled-components";
 import { Post } from "../../api/postApi";
 import date from "../../utils/date-utils";
 import pluralize from "pluralize";
@@ -28,6 +34,8 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
     const { user, message, likes, comments, creationDate } = post;
 
     let [fromNow, setFromNow] = useState(date.fromNow(creationDate));
+
+    const themeContext = useContext(ThemeContext);
 
     useEffect(() => {
         const interval = setInterval(
@@ -57,7 +65,7 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
                 <GridItem colStart={2} align="center">
                     <div
                         style={{
-                            color: theme.colors.blue,
+                            color: themeContext.colors.blue,
                             fontSize: "1.4rem",
                         }}
                     >
@@ -71,7 +79,7 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
                 <GridItem colStart={2} align="start">
                     <div
                         style={{
-                            color: theme.colors.gray,
+                            color: themeContext.colors.gray,
                             fontSize: "1.2rem",
                         }}
                     >
@@ -82,12 +90,12 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
                     <p>{message}</p>
                 </GridItem>
                 <GridItem colSpan={2}>
-                    <div style={{ color: theme.colors.gray }}>
+                    <div style={{ color: themeContext.colors.gray }}>
                         <span
                             style={{
                                 color: likes
                                     ? "inherit"
-                                    : theme.colors.grayLight,
+                                    : themeContext.colors.grayLight,
                             }}
                         >
                             {`${likes} ${pluralize("Like", likes)}`}
@@ -97,7 +105,7 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
                             style={{
                                 color: comments.length
                                     ? "inherit"
-                                    : theme.colors.grayLight,
+                                    : themeContext.colors.grayLight,
                             }}
                         >
                             {`${comments.length} ${pluralize(
@@ -109,6 +117,13 @@ const PostCard: FC<PostCardProps> = ({ post }): JSX.Element => {
                 </GridItem>
                 <GridItem colStart={3} rowStart={2} justify="end">
                     <FontAwesomeIcon icon={faEllipsisH} />
+                </GridItem>
+                <GridItem colStart={1} colSpan={3}>
+                    <FlexContainer direction="column" gap={2}>
+                        {comments.map((comment, index) => (
+                            <CommentDisplay comment={comment} key={index} />
+                        ))}
+                    </FlexContainer>
                 </GridItem>
             </GridContainer>
         </StyledPostCard>

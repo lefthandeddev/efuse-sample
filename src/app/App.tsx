@@ -11,18 +11,9 @@ const StyledApp = styled.div`
     margin-right: auto;
     box-sizing: border-box;
 
-    > div > * {
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
-
     @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
         > div {
             margin: 1rem;
-            > * {
-                margin-top: 1rem;
-                margin-bottom: 1rem;
-            }
         }
     }
 `;
@@ -41,7 +32,7 @@ const App = (): JSX.Element => {
 
     return (
         <StyledApp>
-            <FlexContainer direction="column">
+            <FlexContainer direction="column" gap={2}>
                 {posts.map((post, index) => (
                     <PostCard post={post} key={index} />
                 ))}

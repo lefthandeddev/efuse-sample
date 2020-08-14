@@ -12,34 +12,36 @@ const testUser = {
     location: "test location",
 };
 
-const testPost = {
-    id: 1,
-    userId: 1,
-    user: testUser,
-    message: "test message 1",
-    likes: 0,
-    comments: [],
-    creationDate: new Date("2020-08-10T11:28:25.521Z"),
-};
-
 const testComment = {
     userId: 1,
-    message: "test",
+    message: "test comment 1",
     user: testUser,
     likes: 0,
     creationDate: new Date("2020-08-10T11:30:25.521Z"),
 };
 
-test("displays a post", () => {
-    const { getByText, getByRole } = render(<PostCard post={testPost} />);
+const testPost = {
+    id: 1,
+    userId: 1,
+    user: testUser,
+    message: "test message 1",
+    likes: 1,
+    comments: [testComment],
+    creationDate: new Date("2020-08-10T11:28:25.521Z"),
+};
 
-    getByText("test user 1");
+test("displays a post", () => {
+    const { getByText, getAllByRole, getAllByText } = render(
+        <PostCard post={testPost} />
+    );
+
+    getAllByText("test user 1");
     getByText("test location");
     getByText("test message 1");
     getByText("a few seconds ago");
-    getByRole("img");
-    getByText("0 Likes");
-    getByText("0 Comments");
+    getAllByRole("img");
+    getByText("1 Like");
+    getByText("1 Comment");
 });
 
 test("updates post creation date display", () => {
@@ -48,25 +50,9 @@ test("updates post creation date display", () => {
 
     render(<PostCard post={testPost} />);
 
-    expect(dateSpy).toHaveBeenCalledTimes(1);
+    expect(dateSpy).toHaveBeenCalledTimes(2); // once for the post and once for the comment
     jest.advanceTimersByTime(1000 * 60 * 5);
-    expect(dateSpy).toHaveBeenCalledTimes(6);
-});
-
-test("displays like and comment counts", () => {
-    const { getByText } = render(
-        <PostCard
-            post={{
-                ...testPost,
-                ...{
-                    likes: 1,
-                    comments: [testComment],
-                },
-            }}
-        />
-    );
-    getByText("1 Like");
-    getByText("1 Comment");
+    expect(dateSpy).toHaveBeenCalledTimes(12);
 });
 
 test("displays like and comment counts as plural", () => {
@@ -83,4 +69,9 @@ test("displays like and comment counts as plural", () => {
     );
     getByText("2 Likes");
     getByText("2 Comments");
+});
+
+test("displays comments", () => {
+    const { getByText } = render(<PostCard post={testPost} />);
+    getByText("test comment 1");
 });
