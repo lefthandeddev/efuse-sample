@@ -9,6 +9,7 @@ const StyledCommentCard = styled(Card)`
   background-color: ${({ theme }) => theme.colors.primary};
   box-shadow: none;
   border-radius: ${({ theme }) => theme.borderRadius};
+  padding: 1.5rem;
 `;
 
 interface CommentDisplayProps {

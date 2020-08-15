@@ -25,6 +25,7 @@ const data = [
     likes: 11,
     comments: [
       {
+        id: 1,
         user: user,
         message:
           "Yeah, but your scientists were so preoccupied with whether or not they could, they didn't stop to think if they should.",

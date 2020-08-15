@@ -1,10 +1,4 @@
-import React, {
-  FC,
-  useState,
-  useEffect,
-  useContext,
-  ButtonHTMLAttributes,
-} from "react";
+import React, { FC, useState, useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMapMarkerAlt,
@@ -38,6 +32,26 @@ const Button = styled.button`
   font-size: 2rem;
 `;
 
+const CardContent = styled.div`
+  padding: 2rem;
+`;
+
+const CardConentTop = styled(CardContent)`
+  border-top-left-radius: ${({ theme }) => theme.borderRadius};
+  border-top-right-radius: ${({ theme }) => theme.borderRadius};
+`;
+
+const CardContentBottom = styled(CardContent)`
+  border-top: 1px solid #d7d7d7;
+  border-bottom-left-radius: ${({ theme }) => theme.borderRadius};
+  border-bottom-right-radius: ${({ theme }) => theme.borderRadius};
+  background-color: ${({ theme }) => theme.colors.light};
+`;
+
+const CommentContainer = styled.div`
+  margin-top: 1rem;
+`;
+
 const StyledPostCard = styled(Card)`
   p {
     margin: 1rem 0;
@@ -63,109 +77,92 @@ const PostCard: FC<PostCardProps> = ({ post, onLike }): JSX.Element => {
   }, [fromNow]);
   return (
     <StyledPostCard>
-      <GridContainer
-        rows={["auto"]}
-        cols={["8rem", "auto", "auto"]}
-        align="center"
-        colGap="10px"
-      >
-        <GridItem rowSpan={3}>
-          <Avatar src={user.avatar} />
-        </GridItem>
-        <GridItem colStart={2} align="end">
-          <h1 style={{ fontSize: "2.4rem" }}>{user.name}</h1>
-        </GridItem>
-        <GridItem colStart={2} align="center">
-          <div
-            style={{
-              color: themeContext.colors.blue,
-              fontSize: "1.4rem",
-            }}
-          >
-            <FontAwesomeIcon
-              icon={faMapMarkerAlt}
-              style={{ marginRight: "8px" }}
-            />
-            {user.location}
-          </div>
-        </GridItem>
-        <GridItem colStart={2} align="start">
-          <div
-            style={{
-              color: themeContext.colors.gray,
-              fontSize: "1.2rem",
-            }}
-          >
-            {fromNow}
-          </div>
-        </GridItem>
-        <GridItem colSpan={3}>
-          <p>{message}</p>
-        </GridItem>
-        <GridItem colSpan={2}>
-          <div style={{ color: themeContext.colors.gray }}>
-            <span
+      <CardConentTop>
+        <GridContainer cols={["8rem", "auto", "auto"]} colGap="10px">
+          <GridItem rowSpan={3}>
+            <Avatar src={user.avatar} />
+          </GridItem>
+          <GridItem colStart={2} align="end">
+            <h1 style={{ fontSize: "2.4rem" }}>{user.name}</h1>
+          </GridItem>
+          <GridItem colStart={2} align="center">
+            <div
               style={{
-                color: likes ? "inherit" : themeContext.colors.grayLight,
+                color: themeContext.colors.blue,
+                fontSize: "1.4rem",
               }}
             >
-              {`${likes} ${pluralize("Like", likes)}`}
-            </span>
-            &nbsp;•&nbsp;
-            <span
+              <FontAwesomeIcon
+                icon={faMapMarkerAlt}
+                style={{ marginRight: "8px" }}
+              />
+              {user.location}
+            </div>
+          </GridItem>
+          <GridItem colStart={2} align="start">
+            <div
               style={{
-                color: comments.length
-                  ? "inherit"
-                  : themeContext.colors.grayLight,
+                color: themeContext.colors.gray,
+                fontSize: "1.2rem",
               }}
             >
-              {`${comments.length} ${pluralize("Comment", comments.length)}`}
-            </span>
-          </div>
-        </GridItem>
-        <GridItem colStart={3} rowStart={2} justify="end">
-          <FontAwesomeIcon icon={faEllipsisH} />
-        </GridItem>
-        <GridItem colStart={1} colSpan={3}>
-          <div
-            style={{
-              backgroundColor: themeContext.colors.light,
-              margin: "2rem -2rem -2rem -2rem",
-              padding: "0 2rem 2rem 2rem",
-              borderBottomLeftRadius: themeContext.borderRadius,
-              borderBottomRightRadius: themeContext.borderRadius,
-              borderTop: `1px solid #d7d7d7`,
+              {fromNow}
+            </div>
+          </GridItem>
+          <GridItem colSpan={3}>
+            <p>{message}</p>
+          </GridItem>
+          <GridItem colSpan={2}>
+            <div style={{ color: themeContext.colors.gray }}>
+              <span
+                style={{
+                  color: likes ? "inherit" : themeContext.colors.grayLight,
+                }}
+              >
+                {`${likes} ${pluralize("Like", likes)}`}
+              </span>
+              &nbsp;•&nbsp;
+              <span
+                style={{
+                  color: comments.length
+                    ? "inherit"
+                    : themeContext.colors.grayLight,
+                }}
+              >
+                {`${comments.length} ${pluralize("Comment", comments.length)}`}
+              </span>
+            </div>
+          </GridItem>
+          <GridItem colStart={3} rowStart={2} justify="end">
+            <FontAwesomeIcon icon={faEllipsisH} />
+          </GridItem>
+        </GridContainer>
+      </CardConentTop>
+      <CardContentBottom>
+        <div>
+          <Button
+            onClick={() => {
+              onLike(id);
             }}
           >
-            <FlexContainer direction="column" gap={2}>
-              <div>
-                <Button
-                  onClick={() => {
-                    onLike(id);
-                  }}
-                >
-                  <div
-                    style={{
-                      color: liked
-                        ? themeContext.colors.red
-                        : themeContext.colors.gray,
-                    }}
-                  >
-                    <FontAwesomeIcon
-                      icon={faHeart}
-                      style={{ marginRight: "8px" }}
-                    />
-                    Like
-                  </div>
-                </Button>
-              </div>
-              {comments.map((comment, index) => (
-                <CommentDisplay comment={comment} key={index} />
-              ))}
-            </FlexContainer>
-          </div>
-        </GridItem>
-      </GridContainer>
+            <div
+              style={{
+                color: liked
+                  ? themeContext.colors.red
+                  : themeContext.colors.gray,
+              }}
+            >
+              <FontAwesomeIcon icon={faHeart} style={{ marginRight: "8px" }} />
+              Like
+            </div>
+          </Button>
+        </div>
+        {comments.map((comment, index) => (
+          <CommentContainer key={index}>
+            <CommentDisplay comment={comment} />
+          </CommentContainer>
+        ))}
+      </CardContentBottom>
     </StyledPostCard>
   );
 };
