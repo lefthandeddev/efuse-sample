@@ -1,4 +1,10 @@
-import React, { FC, useState, useEffect, useContext } from "react";
+import React, {
+  FC,
+  useState,
+  useEffect,
+  useContext,
+  ButtonHTMLAttributes,
+} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMapMarkerAlt,
@@ -22,6 +28,15 @@ export interface PostCardProps {
   post: Post;
   onLike: (postId: number) => void;
 }
+
+const Button = styled.button`
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0.4rem;
+  cursor: pointer;
+  font-size: 2rem;
+`;
 
 const StyledPostCard = styled(Card)`
   p {
@@ -125,28 +140,25 @@ const PostCard: FC<PostCardProps> = ({ post, onLike }): JSX.Element => {
           >
             <FlexContainer direction="column" gap={2}>
               <div>
-                <button
-                  style={{
-                    background: "none",
-                    border: "none",
-                    margin: 0,
-                    padding: 0,
-                    cursor: "pointer",
-                    fontSize: "2rem",
-                    color: liked
-                      ? themeContext.colors.red
-                      : themeContext.colors.gray,
-                  }}
+                <Button
                   onClick={() => {
                     onLike(id);
                   }}
                 >
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    style={{ marginRight: "8px" }}
-                  />
-                  Like
-                </button>
+                  <div
+                    style={{
+                      color: liked
+                        ? themeContext.colors.red
+                        : themeContext.colors.gray,
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faHeart}
+                      style={{ marginRight: "8px" }}
+                    />
+                    Like
+                  </div>
+                </Button>
               </div>
               {comments.map((comment, index) => (
                 <CommentDisplay comment={comment} key={index} />
