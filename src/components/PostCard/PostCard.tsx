@@ -66,7 +66,6 @@ const PostCard: FC<PostCardProps> = ({ post, onLike }): JSX.Element => {
       <GridContainer
         rows={["auto"]}
         cols={["8rem", "auto", "auto"]}
-        justify="start"
         align="center"
         colGap="10px"
       >
@@ -100,7 +99,7 @@ const PostCard: FC<PostCardProps> = ({ post, onLike }): JSX.Element => {
             {fromNow}
           </div>
         </GridItem>
-        <GridItem colSpan={2}>
+        <GridItem colSpan={3}>
           <p>{message}</p>
         </GridItem>
         <GridItem colSpan={2}>
