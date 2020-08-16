@@ -111,7 +111,7 @@ const CommentDisplay: FC<CommentDisplayProps> = ({
                   <span
                     style={{
                       color: likes
-                        ? themeContext.colors.dark
+                        ? themeContext.colors.gray
                         : themeContext.colors.grayLight,
                     }}
                   >
@@ -122,7 +122,9 @@ const CommentDisplay: FC<CommentDisplayProps> = ({
                     <Button onClick={handleLike}>
                       <div
                         style={{
-                          color: liked ? themeContext.colors.red : "inherit",
+                          color: liked
+                            ? themeContext.colors.red
+                            : themeContext.colors.gray,
                         }}
                       >
                         Like

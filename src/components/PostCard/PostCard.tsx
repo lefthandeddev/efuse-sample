@@ -1,9 +1,17 @@
-import React, { FC, useState, useEffect, useContext, MouseEvent } from "react";
+import React, {
+  FC,
+  useState,
+  useEffect,
+  useContext,
+  MouseEvent,
+  FormEvent,
+} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMapMarkerAlt,
   faEllipsisH,
   faHeart,
+  faCommentDots,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   GridContainer,
@@ -35,6 +43,12 @@ const Button = styled.button`
   font-size: 2rem;
 `;
 
+const Actions = styled.div`
+  > * {
+    margin-right: 1rem;
+  }
+`;
+
 const CommentContainer = styled.div`
   margin-top: 1rem;
 `;
@@ -44,7 +58,7 @@ const PostCardContentBottom = styled(CardContentBottom)`
 `;
 
 const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
-  const { users, comments, setPost, posts } = useData();
+  const { users, comments, setPost, posts, setComment } = useData();
   const post: Post = posts.find(p => p.id === postId) || {
     id: -1,
     userId: -1,
@@ -63,12 +77,42 @@ const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
   const user = users.find(u => u.id === post.userId);
   const postComments = comments.filter(c => c.postId === post.id);
 
+  const [showCommentInput, setShowCommentInput] = useState(false);
+  const [commentInput, setCommentInput] = useState("");
+
   const handleLike = (e: MouseEvent) => {
     setPost({
       ...post,
       liked: !post.liked,
       likes: post.liked ? post.likes - 1 : post.likes + 1,
     });
+  };
+
+  const handleShowCommentInput = (e: MouseEvent) => {
+    setShowCommentInput(!showCommentInput);
+  };
+
+  const handleCommentInputChange = (e: FormEvent<HTMLInputElement>) => {
+    setCommentInput(e.currentTarget.value);
+  };
+
+  const handleCommentInputSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const maxId = comments.reduce((prev, curr) =>
+      prev.id > curr.id ? prev : curr
+    ).id;
+    setComment({
+      message: commentInput,
+      id: maxId + 1,
+      userId: 1,
+      postId: post.id,
+      creationDate: new Date(),
+      liked: false,
+      likes: 0,
+    });
+    setCommentInput("");
+    setShowCommentInput(false);
+
+    e.preventDefault();
   };
 
   useEffect(() => {
@@ -147,7 +191,7 @@ const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
         </GridContainer>
       </CardConentTop>
       <PostCardContentBottom>
-        <div>
+        <Actions>
           <Button onClick={handleLike}>
             <div
               style={{
@@ -156,11 +200,34 @@ const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
                   : themeContext.colors.gray,
               }}
             >
-              <FontAwesomeIcon icon={faHeart} style={{ marginRight: "8px" }} />
+              <FontAwesomeIcon
+                icon={faHeart}
+                style={{ marginRight: "0.5rem" }}
+              />
               Like
             </div>
           </Button>
-        </div>
+          <Button onClick={handleShowCommentInput}>
+            <div style={{ color: themeContext.colors.gray }}>
+              <FontAwesomeIcon
+                icon={faCommentDots}
+                style={{ marginRight: "0.5rem" }}
+              />
+              Comment
+            </div>
+          </Button>
+        </Actions>
+        {showCommentInput && (
+          <form onSubmit={handleCommentInputSubmit}>
+            <input
+              type="text"
+              placeholder="Add a comment"
+              autoFocus
+              value={commentInput}
+              onChange={handleCommentInputChange}
+            />
+          </form>
+        )}
         {postComments.map((comment, index) => (
           <CommentContainer key={index}>
             <CommentDisplay commentId={comment.id} />
