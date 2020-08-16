@@ -1,110 +1,137 @@
 import React, { FC } from "react";
-import { render } from "test-utils";
+import { render, waitFor, fireEvent } from "test-utils";
 import PostCard from ".";
 import date from "../../utils/date-utils";
 import { User, Comment, Post } from "../../api/dataApi";
-import { DataContext } from "../../providers/DataProvider";
+import DataProvider, { DataContext } from "../../providers/DataProvider";
+import { fetchData, Data } from "../../api/dataApi";
+jest.mock("../../api/dataApi");
+const mockFetchData = fetchData as jest.Mock<Promise<Data>>;
 
 Date.now = jest.fn(() => new Date("2020-08-10T11:28:25.521Z").valueOf());
 
 const testUser: User = {
-    id: 1,
-    name: "test user 1",
-    avatar: "test avatar",
-    location: "test location",
-    profession: "test profession",
+  id: 1,
+  name: "test user 1",
+  avatar: "test avatar",
+  location: "test location",
+  profession: "test profession",
 };
 
 const testComment: Comment = {
-    id: 1,
-    postId: 1,
-    userId: 1,
-    message: "test comment 1",
-    likes: 0,
-    creationDate: new Date("2020-08-10T11:30:25.521Z"),
-    liked: false,
+  id: 1,
+  postId: 1,
+  userId: 1,
+  message: "test comment 1",
+  likes: 0,
+  creationDate: new Date("2020-08-10T11:30:25.521Z"),
+  liked: false,
 };
 
 const testPost: Post = {
-    id: 1,
-    userId: 1,
-    message: "test message 1",
-    likes: 1,
-    creationDate: new Date("2020-08-10T11:28:25.521Z"),
-    liked: false,
+  id: 1,
+  userId: 1,
+  message: "test message 1",
+  likes: 0,
+  creationDate: new Date("2020-08-10T11:28:25.521Z"),
+  liked: false,
 };
 
-const TestDataContext: FC<{ comments?: Comment[] }> = ({
-    comments,
-    children,
+const TestDataContextProvider: FC<{ comments?: Comment[]; posts?: Post[] }> = ({
+  comments,
+  posts,
+  children,
 }) => (
-    <DataContext.Provider
-        value={{
-            users: [testUser],
-            comments: comments || [testComment],
-            posts: [testPost],
-            setComment: () => {},
-            setPost: () => {},
-        }}
-    >
-        {children}
-    </DataContext.Provider>
+  <DataContext.Provider
+    value={{
+      users: [testUser],
+      comments: comments || [],
+      posts: posts || [testPost],
+      setComment: () => {},
+      setPost: () => {},
+    }}
+  >
+    {children}
+  </DataContext.Provider>
 );
 
 test("displays a post", () => {
-    const { getByText, getAllByRole, getAllByText } = render(
-        <TestDataContext>
-            <PostCard post={testPost} onLike={() => {}} />
-        </TestDataContext>
-    );
+  const { getByText, getAllByRole, getAllByText } = render(
+    <TestDataContextProvider>
+      <PostCard postId={1} />
+    </TestDataContextProvider>
+  );
 
-    getAllByText("test user 1");
-    getByText("test location");
-    getByText("test message 1");
-    getByText("a few seconds ago");
-    getAllByRole("img");
-    getByText("1 Like");
-    getByText("1 Comment");
+  getAllByText("test user 1");
+  getByText("test location");
+  getByText("test message 1");
+  getByText("a few seconds ago");
+  getAllByRole("img");
+  getByText("0 Likes");
+  getByText("0 Comments");
 });
 
 test("updates post creation date display", () => {
-    jest.useFakeTimers();
-    const dateSpy = jest.spyOn(date, "fromNow");
+  jest.useFakeTimers();
+  const dateSpy = jest.spyOn(date, "fromNow");
 
-    render(
-        <TestDataContext>
-            <PostCard post={testPost} onLike={() => {}} />
-        </TestDataContext>
-    );
+  render(
+    <TestDataContextProvider>
+      <PostCard postId={1} />
+    </TestDataContextProvider>
+  );
 
-    expect(dateSpy).toHaveBeenCalledTimes(2); // once for the post and once for the comment
-    jest.advanceTimersByTime(1000 * 60 * 5);
-    expect(dateSpy).toHaveBeenCalledTimes(12);
+  expect(dateSpy).toHaveBeenCalledTimes(1);
+  jest.advanceTimersByTime(1000 * 60 * 5);
+  expect(dateSpy).toHaveBeenCalledTimes(6);
 });
 
 test("displays like and comment counts as plural", () => {
-    const { getByText } = render(
-        <TestDataContext comments={[testComment, testComment]}>
-            <PostCard
-                post={{
-                    ...testPost,
-                    ...{
-                        likes: 2,
-                    },
-                }}
-                onLike={() => {}}
-            />
-        </TestDataContext>
-    );
-    getByText("2 Likes");
-    getByText("2 Comments");
+  const { getByText } = render(
+    <TestDataContextProvider
+      comments={[testComment, testComment]}
+      posts={[
+        {
+          ...testPost,
+          ...{
+            likes: 2,
+          },
+        },
+      ]}
+    >
+      <PostCard postId={1} />
+    </TestDataContextProvider>
+  );
+  getByText("2 Likes");
+  getByText("2 Comments");
 });
 
 test("displays comments", () => {
-    const { getByText } = render(
-        <TestDataContext>
-            <PostCard post={testPost} onLike={() => {}} />
-        </TestDataContext>
-    );
-    getByText("test comment 1");
+  const { getByText } = render(
+    <TestDataContextProvider comments={[testComment]}>
+      <PostCard postId={1} />
+    </TestDataContextProvider>
+  );
+  getByText("test comment 1");
+});
+
+test("clicking 'like' toggles liked status", async () => {
+  mockFetchData.mockResolvedValue({
+    users: [testUser],
+    posts: [testPost],
+    comments: [],
+  });
+
+  const { getByText } = render(
+    <DataProvider>
+      <PostCard postId={1} />
+    </DataProvider>
+  );
+
+  await waitFor(() => getByText("0 Likes"));
+  const likeButton = getByText("Like");
+  fireEvent.click(likeButton);
+  getByText("1 Like");
+  fireEvent.click(likeButton);
+  getByText("0 Likes");
 });

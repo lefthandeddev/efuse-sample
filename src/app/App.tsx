@@ -21,24 +21,14 @@ const PostContainer = styled.div`
 `;
 
 const App = (): JSX.Element => {
-  const { posts, setPost } = useData();
-
-  const handleOnLike = (postId: number) => {
-    const post = posts.find(p => p.id === postId)!;
-
-    setPost({
-      ...post,
-      liked: !post.liked,
-      likes: post.liked ? post.likes - 1 : post.likes + 1,
-    });
-  };
+  const { posts } = useData();
 
   return (
     <StyledApp>
       <FlexContainer direction="column">
         {posts.map((post, index) => (
           <PostContainer key={index}>
-            <PostCard post={post} onLike={handleOnLike} />
+            <PostCard postId={post.id} />
           </PostContainer>
         ))}
       </FlexContainer>
