@@ -33,6 +33,10 @@ const GlobalStyle = createGlobalStyle`
         margin: 0;
         line-height: 1.15;
     }
+
+    input, button {
+        outline: none;
+    }
 `;
 
 export default GlobalStyle;
