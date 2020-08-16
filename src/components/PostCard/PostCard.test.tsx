@@ -44,6 +44,7 @@ const TestDataContextProvider: FC<{ comments?: Comment[]; posts?: Post[] }> = ({
 }) => (
   <DataContext.Provider
     value={{
+      currentUser: testUser,
       users: [testUser],
       comments: comments || [],
       posts: posts || [testPost],

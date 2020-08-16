@@ -2,11 +2,13 @@ import React from "react";
 import { render } from "test-utils";
 import App from ".";
 import { DataContext } from "../providers/DataProvider";
+import { User } from "src/api/dataApi";
 
 test("displays posts", async () => {
   const { getByText } = render(
     <DataContext.Provider
       value={{
+        currentUser: {} as User,
         users: [],
         posts: [
           {

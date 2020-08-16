@@ -76,7 +76,7 @@ const CommentDisplay: FC<CommentDisplayProps> = ({
     <GridContainer cols={["6rem", "auto"]} colGap="10px">
       {user && (
         <GridItem align="center" justify="center">
-          <Avatar src={user.avatar} size={6} />
+          <Avatar src={user.avatar} size={5} />
         </GridItem>
       )}
       <GridItem>

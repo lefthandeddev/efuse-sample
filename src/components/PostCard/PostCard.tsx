@@ -58,7 +58,14 @@ const PostCardContentBottom = styled(CardContentBottom)`
 `;
 
 const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
-  const { users, comments, setPost, posts, setComment } = useData();
+  const {
+    users,
+    comments,
+    setPost,
+    posts,
+    setComment,
+    currentUser,
+  } = useData();
   const post: Post = posts.find(p => p.id === postId) || {
     id: -1,
     userId: -1,
@@ -191,43 +198,64 @@ const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
         </GridContainer>
       </CardConentTop>
       <PostCardContentBottom>
-        <Actions>
-          <Button onClick={handleLike}>
-            <div
-              style={{
-                color: liked
-                  ? themeContext.colors.red
-                  : themeContext.colors.gray,
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faHeart}
-                style={{ marginRight: "0.5rem" }}
-              />
-              Like
-            </div>
-          </Button>
-          <Button onClick={handleShowCommentInput}>
-            <div style={{ color: themeContext.colors.gray }}>
-              <FontAwesomeIcon
-                icon={faCommentDots}
-                style={{ marginRight: "0.5rem" }}
-              />
-              Comment
-            </div>
-          </Button>
-        </Actions>
-        {showCommentInput && (
-          <form onSubmit={handleCommentInputSubmit}>
-            <input
-              type="text"
-              placeholder="Add a comment"
-              autoFocus
-              value={commentInput}
-              onChange={handleCommentInputChange}
-            />
-          </form>
-        )}
+        <GridContainer rows={["auto", "auto"]} rowGap="10px">
+          <GridItem>
+            <Actions>
+              <Button onClick={handleLike}>
+                <div
+                  style={{
+                    color: liked
+                      ? themeContext.colors.red
+                      : themeContext.colors.gray,
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    style={{ marginRight: "0.5rem" }}
+                  />
+                  Like
+                </div>
+              </Button>
+              <Button onClick={handleShowCommentInput}>
+                <div style={{ color: themeContext.colors.gray }}>
+                  <FontAwesomeIcon
+                    icon={faCommentDots}
+                    style={{ marginRight: "0.5rem" }}
+                  />
+                  Comment
+                </div>
+              </Button>
+            </Actions>
+          </GridItem>
+          {showCommentInput && (
+            <GridItem>
+              <GridContainer cols={["6rem", "auto"]} colGap="10px">
+                <GridItem align="center" justify="center">
+                  <Avatar src={currentUser.avatar} size={5} />
+                </GridItem>
+                <GridItem align="center">
+                  <form onSubmit={handleCommentInputSubmit}>
+                    <input
+                      style={{
+                        width: "100%",
+                        boxSizing: "border-box",
+                        backgroundColor: themeContext.colors.light,
+                        borderRadius: "25px",
+                        padding: "1.4rem",
+                        border: `1px solid ${themeContext.colors.dark}`,
+                      }}
+                      type="text"
+                      placeholder="Add a comment"
+                      autoFocus
+                      value={commentInput}
+                      onChange={handleCommentInputChange}
+                    />
+                  </form>
+                </GridItem>
+              </GridContainer>
+            </GridItem>
+          )}
+        </GridContainer>
         {postComments.map((comment, index) => (
           <CommentContainer key={index}>
             <CommentDisplay commentId={comment.id} />

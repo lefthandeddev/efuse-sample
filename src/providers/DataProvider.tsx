@@ -8,6 +8,7 @@ import React, {
 import { Post, User, fetchData, Comment } from "../api/dataApi";
 
 export interface IDataContext {
+  currentUser: User;
   users: User[];
   posts: Post[];
   comments: Comment[];
@@ -18,6 +19,13 @@ export interface IDataContext {
 export const DataContext = createContext<IDataContext>({} as IDataContext);
 
 const DataProvider: FC = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState<User>({
+    id: -1,
+    name: "",
+    location: "",
+    profession: "",
+    avatar: "",
+  });
   const [posts, setPosts] = useState<Post[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -37,6 +45,7 @@ const DataProvider: FC = ({ children }) => {
   useEffect(() => {
     const getData = async () => {
       const data = await fetchData();
+      setCurrentUser(data.users[0]);
       setUsers(data.users);
       setComments(data.comments);
       setPosts(data.posts);
@@ -48,6 +57,7 @@ const DataProvider: FC = ({ children }) => {
   return (
     <DataContext.Provider
       value={{
+        currentUser: currentUser,
         users: users,
         posts: posts,
         comments: comments,
