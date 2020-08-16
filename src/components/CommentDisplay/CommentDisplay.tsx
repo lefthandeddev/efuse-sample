@@ -1,4 +1,12 @@
-import { Card, GridContainer, GridItem, Avatar, CardContent } from "..";
+import {
+    Card,
+    GridContainer,
+    GridItem,
+    Avatar,
+    CardContent,
+    Message,
+    Accent,
+} from "..";
 import styled, { ThemeContext } from "styled-components";
 import React, { FC, useState, useEffect, useContext } from "react";
 import { Comment } from "../../api/dataApi";
@@ -54,14 +62,7 @@ const CommentDisplay: FC<CommentDisplayProps> = ({ comment }): JSX.Element => {
                                         </div>
                                     </GridItem>
                                     <GridItem rowStart={2}>
-                                        <div
-                                            style={{
-                                                color: themeContext.colors.blue,
-                                                fontSize: "1.4rem",
-                                            }}
-                                        >
-                                            {user.profession}
-                                        </div>
+                                        <Accent>{user.profession}</Accent>
                                     </GridItem>
                                 </>
                             )}
@@ -76,7 +77,7 @@ const CommentDisplay: FC<CommentDisplayProps> = ({ comment }): JSX.Element => {
                                 </div>
                             </GridItem>
                             <GridItem rowStart={3} colSpan={2}>
-                                <p>{message}</p>
+                                <Message>{message}</Message>
                             </GridItem>
                             <GridItem rowStart={4} align="end">
                                 <div

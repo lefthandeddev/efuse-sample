@@ -23,7 +23,6 @@ export const CardContentBottom = styled(CardContent)`
     border-top: 1px solid #d7d7d7;
     border-bottom-left-radius: ${({ theme }) => theme.borderRadius};
     border-bottom-right-radius: ${({ theme }) => theme.borderRadius};
-    background-color: ${({ theme }) => theme.colors.light};
 `;
 
 export default Card;

@@ -13,6 +13,8 @@ import {
     CommentDisplay,
     CardConentTop,
     CardContentBottom,
+    Message,
+    Accent,
 } from "..";
 import styled, { ThemeContext } from "styled-components";
 import { Post } from "../../api/dataApi";
@@ -38,10 +40,8 @@ const CommentContainer = styled.div`
     margin-top: 1rem;
 `;
 
-const StyledPostCard = styled(Card)`
-    p {
-        margin: 1rem 0;
-    }
+const PostCardContentBottom = styled(CardContentBottom)`
+    background-color: ${({ theme }) => theme.colors.light};
 `;
 
 const PostCard: FC<PostCardProps> = ({ post, onLike }): JSX.Element => {
@@ -66,7 +66,7 @@ const PostCard: FC<PostCardProps> = ({ post, onLike }): JSX.Element => {
         };
     }, [fromNow]);
     return (
-        <StyledPostCard>
+        <Card>
             <CardConentTop>
                 <GridContainer cols={["8rem", "auto", "auto"]} colGap="10px">
                     {user && (
@@ -80,18 +80,13 @@ const PostCard: FC<PostCardProps> = ({ post, onLike }): JSX.Element => {
                                 </h1>
                             </GridItem>
                             <GridItem colStart={2} align="center">
-                                <div
-                                    style={{
-                                        color: themeContext.colors.blue,
-                                        fontSize: "1.4rem",
-                                    }}
-                                >
+                                <Accent>
                                     <FontAwesomeIcon
                                         icon={faMapMarkerAlt}
                                         style={{ marginRight: "8px" }}
                                     />
                                     {user.location}
-                                </div>
+                                </Accent>
                             </GridItem>
                         </>
                     )}
@@ -106,7 +101,7 @@ const PostCard: FC<PostCardProps> = ({ post, onLike }): JSX.Element => {
                         </div>
                     </GridItem>
                     <GridItem colSpan={3}>
-                        <p>{message}</p>
+                        <Message>{message}</Message>
                     </GridItem>
                     <GridItem colSpan={2}>
                         <div style={{ color: themeContext.colors.gray }}>
@@ -139,7 +134,7 @@ const PostCard: FC<PostCardProps> = ({ post, onLike }): JSX.Element => {
                     </GridItem>
                 </GridContainer>
             </CardConentTop>
-            <CardContentBottom>
+            <PostCardContentBottom>
                 <div>
                     <Button
                         onClick={() => {
@@ -166,8 +161,8 @@ const PostCard: FC<PostCardProps> = ({ post, onLike }): JSX.Element => {
                         <CommentDisplay comment={comment} />
                     </CommentContainer>
                 ))}
-            </CardContentBottom>
-        </StyledPostCard>
+            </PostCardContentBottom>
+        </Card>
     );
 };
 

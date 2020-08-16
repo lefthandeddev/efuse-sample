@@ -21,3 +21,5 @@ export * from "./Avatar";
 
 export { default as CommentDisplay } from "./CommentDisplay";
 export * from "./CommentDisplay";
+
+export * from "./Typography";
