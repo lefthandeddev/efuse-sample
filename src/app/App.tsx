@@ -1,57 +1,51 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { PostCard, FlexContainer } from "../components";
 import styled from "styled-components";
-import { fetchPosts, Post } from "../api/postApi";
+import { useData } from "../providers/DataProvider";
 
 const StyledApp = styled.div`
-  max-width: ${({ theme }) => {
-    return theme.breakpoints.md;
-  }};
-  margin-left: auto;
-  margin-right: auto;
-  box-sizing: border-box;
+    max-width: ${({ theme }) => {
+        return theme.breakpoints.md;
+    }};
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+`;
 
-  @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
-    > div {
-      margin: 1rem;
+const PostContainer = styled.div`
+    margin-top: 1rem;
+
+    @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
+        margin: 2rem 1rem 0 1rem;
     }
-  }
 `;
 
 const App = (): JSX.Element => {
-  const [posts, setPosts] = useState<Post[]>([]);
+    const { posts, setPost } = useData();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const posts = await fetchPosts();
-      setPosts(posts);
+    const handleOnLike = (postId: number) => {
+        const post = posts.find(p => p.id === postId);
+
+        if (post) {
+            setPost({
+                ...post,
+                liked: !post.liked,
+                likes: post.liked ? post.likes - 1 : post.likes + 1,
+            });
+        }
     };
 
-    fetchData();
-  }, [fetchPosts]);
-
-  const handleOnLike = (postId: number) => {
-    const updatedPosts = posts.map(post =>
-      post.id === postId
-        ? {
-            ...post,
-            liked: !post.liked,
-            likes: post.liked ? post.likes - 1 : post.likes + 1,
-          }
-        : post
+    return (
+        <StyledApp>
+            <FlexContainer direction="column">
+                {posts.map((post, index) => (
+                    <PostContainer key={index}>
+                        <PostCard post={post} onLike={handleOnLike} />
+                    </PostContainer>
+                ))}
+            </FlexContainer>
+        </StyledApp>
     );
-    setPosts(updatedPosts);
-  };
-
-  return (
-    <StyledApp>
-      <FlexContainer direction="column" gap={2}>
-        {posts.map((post, index) => (
-          <PostCard post={post} onLike={handleOnLike} key={index} />
-        ))}
-      </FlexContainer>
-    </StyledApp>
-  );
 };
 
 export default App;

@@ -1,44 +1,39 @@
 import React from "react";
-import { render, waitFor } from "test-utils";
+import { render } from "test-utils";
 import App from ".";
-import { fetchPosts, Post } from "../api/postApi";
-jest.mock("../api/postApi");
-const mockFetchPosts = fetchPosts as jest.Mock<Promise<Post[]>>;
-
-beforeAll(() => {
-  const testUser = {
-    id: 1,
-    name: "test user 1",
-    avatar: "test avatar",
-    location: "test location",
-  };
-  mockFetchPosts.mockResolvedValue([
-    {
-      id: 1,
-      userId: 1,
-      user: testUser,
-      message: "test message 1",
-      likes: 0,
-      comments: [],
-      creationDate: new Date(),
-      liked: false,
-    },
-    {
-      id: 2,
-      userId: 1,
-      user: testUser,
-      message: "test message 2",
-      likes: 4,
-      comments: [],
-      creationDate: new Date(),
-      liked: false,
-    },
-  ]);
-});
+import { DataContext } from "../providers/DataProvider";
 
 test("displays posts", async () => {
-  const { getByText } = render(<App />);
-  await waitFor(() => expect(mockFetchPosts).toBeCalledTimes(1));
-  getByText("test message 1");
-  getByText("test message 2");
+    const { getByText } = render(
+        <DataContext.Provider
+            value={{
+                users: [],
+                posts: [
+                    {
+                        id: 1,
+                        userId: 1,
+                        creationDate: new Date(),
+                        message: "test message 1",
+                        likes: 0,
+                        liked: false,
+                    },
+                    {
+                        id: 2,
+                        userId: 1,
+                        creationDate: new Date(),
+                        message: "test message 2",
+                        likes: 0,
+                        liked: false,
+                    },
+                ],
+                comments: [],
+                setPost: () => {},
+                setComment: () => {},
+            }}
+        >
+            <App />
+        </DataContext.Provider>
+    );
+    getByText("test message 1");
+    getByText("test message 2");
 });
