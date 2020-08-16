@@ -33,7 +33,7 @@ const DataProvider: FC = ({ children }) => {
   const setPost = (post: Post) => {
     if (posts.find(p => p.id === post.id))
       setPosts(posts.map(p => (p.id === post.id ? post : p)));
-    else setPosts([...posts, post]);
+    else setPosts([post, ...posts]);
   };
 
   const setComment = (comment: Comment) => {
