@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useState, FC, MouseEvent } from "react";
 import {
   PostCard,
   GridContainer,
@@ -10,6 +10,11 @@ import {
 } from "../components";
 import styled from "styled-components";
 import { useData } from "../providers/DataProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPhotoVideo,
+  IconDefinition,
+} from "@fortawesome/free-solid-svg-icons";
 
 const StyledApp = styled.div`
   max-width: ${({ theme }) => {
@@ -31,14 +36,49 @@ const Feed = styled(GridContainer)`
   }
 `;
 
-const Button = styled.button`
+const ButtonComp: FC<
+  {
+    icon?: IconDefinition;
+    onClick: (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
+  } & React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  >
+> = ({ icon, onClick, children, className }) => {
+  const Icon = styled(FontAwesomeIcon)`
+    margin-right: 0.5rem;
+  `;
+  return (
+    <button className={className} onClick={onClick}>
+      {icon && <Icon icon={icon} />}
+      {children}
+    </button>
+  );
+};
+
+const Button = styled(ButtonComp)`
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme }) => theme.colors.blueLight};
-  border-radius: ${({ theme }) => theme.borderRadius};
+  border-radius: 0.5rem;
   padding: 0.8rem 1.6rem;
   border: none;
   cursor: pointer;
   margin: 0;
+  font-family: ${({ theme }) => theme.fontFamily};
+  font-size: 1.6rem;
+`;
+
+const RoundedButton = styled(Button)`
+  border-radius: 25px;
+  background-color: ${({ theme }) => theme.colors.black};
+`;
+
+const Input = styled.input`
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1.4rem;
+  border: none;
+  font-family: ${({ theme }) => theme.fontFamily};
 `;
 
 const App = (): JSX.Element => {
@@ -89,13 +129,7 @@ const App = (): JSX.Element => {
                 </GridItem>
                 <GridItem align="center">
                   <form onSubmit={handlePostInputSubmit}>
-                    <input
-                      style={{
-                        width: "100%",
-                        boxSizing: "border-box",
-                        padding: "1.4rem",
-                        border: "none",
-                      }}
+                    <Input
                       type="text"
                       placeholder="What is on your mind?"
                       value={postInput}
@@ -106,13 +140,20 @@ const App = (): JSX.Element => {
               </GridContainer>
             </CardConentTop>
             <CardContentBottom>
-              <Button onClick={handlePostItButtonClick}>Post It</Button>
+              <GridContainer cols={["auto", "auto"]}>
+                <GridItem>
+                  <RoundedButton icon={faPhotoVideo}>Photo/Video</RoundedButton>
+                </GridItem>
+                <GridItem justify="end">
+                  <Button onClick={handlePostItButtonClick}>Post It</Button>
+                </GridItem>
+              </GridContainer>
             </CardContentBottom>
           </Card>
         </GridItem>
         {posts &&
-          posts.map((post, index) => (
-            <GridItem key={index}>
+          posts.map(post => (
+            <GridItem key={post.id}>
               <PostCard postId={post.id} />
             </GridItem>
           ))}

@@ -256,8 +256,8 @@ const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
             </GridItem>
           )}
         </GridContainer>
-        {postComments.map((comment, index) => (
-          <CommentContainer key={index}>
+        {postComments.map(comment => (
+          <CommentContainer key={comment.id}>
             <CommentDisplay commentId={comment.id} />
           </CommentContainer>
         ))}
