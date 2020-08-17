@@ -83,14 +83,10 @@ test("creates posts", async () => {
     const input = getByPlaceholderText("What is on your mind?");
     const button = await waitFor(() => getByText("Post It"));
     fireEvent.click(button);
-    // expect(spySetPost).toHaveBeenCalledTimes(0);
     fireEvent.change(input, { target: { value: "a new post" } });
     fireEvent.click(button);
     getByText("a new post");
-    // expect(spySetPost).toHaveBeenCalledTimes(1);
-
     fireEvent.change(input, { target: { value: "another post" } });
     fireEvent.submit(input);
     getByText("another post");
-    // expect(spySetPost).toHaveBeenCalledTimes(2);
 });
