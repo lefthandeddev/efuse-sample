@@ -111,7 +111,11 @@ const App = (): JSX.Element => {
                                 </GridItem>
                                 <GridItem justify="end">
                                     <Button
-                                        bgColor={themeContext.colors.blueLight}
+                                        bgColor={
+                                            postInput
+                                                ? themeContext.colors.blue
+                                                : themeContext.colors.blueLight
+                                        }
                                         color={themeContext.colors.white}
                                         onClick={handlePostItButtonClick}
                                     >
