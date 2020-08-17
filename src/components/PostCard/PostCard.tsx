@@ -30,6 +30,7 @@ import { Post } from "../../api/dataApi";
 import date from "../../utils/date-utils";
 import pluralize from "pluralize";
 import { useData } from "../../providers/DataProvider";
+import Input from "../Input";
 
 export interface PostCardProps {
     postId: number;
@@ -242,16 +243,8 @@ const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
                                 </GridItem>
                                 <GridItem align="center">
                                     <form onSubmit={handleCommentInputSubmit}>
-                                        <input
-                                            style={{
-                                                width: "100%",
-                                                boxSizing: "border-box",
-                                                backgroundColor:
-                                                    themeContext.colors.light,
-                                                borderRadius: "25px",
-                                                padding: "1.4rem",
-                                                border: `1px solid ${themeContext.colors.dark}`,
-                                            }}
+                                        <Input
+                                            rounded
                                             type="text"
                                             placeholder="Add a comment"
                                             autoFocus

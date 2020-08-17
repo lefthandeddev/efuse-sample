@@ -8,6 +8,7 @@ import {
     CardContentBottom,
     Avatar,
     Button,
+    Input,
 } from "../components";
 import styled, { ThemeContext } from "styled-components";
 import { useData } from "../providers/DataProvider";
@@ -31,14 +32,6 @@ const Feed = styled(GridContainer)`
         row-gap: 2rem;
         margin: 2rem 1rem 3rem 1rem;
     }
-`;
-
-const Input = styled.input`
-    width: 100%;
-    box-sizing: border-box;
-    padding: 1.4rem;
-    border: none;
-    font-family: ${({ theme }) => theme.fontFamily};
 `;
 
 const App = (): JSX.Element => {
@@ -94,6 +87,7 @@ const App = (): JSX.Element => {
                                 <GridItem align="center">
                                     <form onSubmit={handlePostInputSubmit}>
                                         <Input
+                                            borderless
                                             type="text"
                                             placeholder="What is on your mind?"
                                             value={postInput}
