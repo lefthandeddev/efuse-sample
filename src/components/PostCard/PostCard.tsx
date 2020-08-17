@@ -96,20 +96,24 @@ const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
 
     const handleCommentInputSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const maxId = comments.reduce((prev, curr) =>
-            prev.id > curr.id ? prev : curr
-        ).id;
-        setComment({
-            message: commentInput,
-            id: maxId + 1,
-            userId: 1,
-            postId: post.id,
-            creationDate: new Date(),
-            liked: false,
-            likes: 0,
-        });
-        setCommentInput("");
-        setShowCommentInput(false);
+        if (commentInput) {
+            const maxId = comments.length
+                ? comments.reduce((prev, curr) =>
+                      prev.id > curr.id ? prev : curr
+                  ).id
+                : 1;
+            setComment({
+                message: commentInput,
+                id: maxId + 1,
+                userId: 1,
+                postId: post.id,
+                creationDate: new Date(),
+                liked: false,
+                likes: 0,
+            });
+            setCommentInput("");
+            setShowCommentInput(false);
+        }
     };
 
     useEffect(() => {

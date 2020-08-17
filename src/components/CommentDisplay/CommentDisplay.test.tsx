@@ -1,5 +1,10 @@
 import React, { FC } from "react";
-import { render, waitFor, fireEvent } from "test-utils";
+import {
+    render,
+    waitFor,
+    fireEvent,
+    waitForElementToBeRemoved,
+} from "test-utils";
 import CommentDisplay from ".";
 import date from "../../utils/date-utils";
 import { User, Comment } from "../../api/dataApi";
@@ -28,6 +33,9 @@ const testComment: Comment = {
     liked: false,
 };
 
+const spySetComment = jest.fn();
+const spyDeleteComment = jest.fn();
+
 const TestDataContext: FC<{ comments?: Comment[] }> = ({
     comments,
     children,
@@ -38,9 +46,9 @@ const TestDataContext: FC<{ comments?: Comment[] }> = ({
             users: [testUser],
             comments: comments || [testComment],
             posts: [],
-            setComment: () => {},
+            setComment: spySetComment,
             setPost: () => {},
-            deleteComment: () => {},
+            deleteComment: spyDeleteComment,
         }}
     >
         {children}
@@ -112,4 +120,34 @@ test("clicking 'like' toggles liked status", async () => {
     queryByText(/1 Like/);
     fireEvent.click(likeButton);
     queryByText(/0 Likes/);
+});
+
+test("can edit comment", () => {
+    const { getByText, getByRole } = render(
+        <TestDataContext>
+            <CommentDisplay commentId={1} />
+        </TestDataContext>
+    );
+    const button = getByText("Edit");
+    fireEvent.click(button);
+    const input = getByRole("textbox");
+    fireEvent.change(input, { target: { value: "" } });
+    fireEvent.keyDown(input, { keyCode: 13 });
+    expect(spySetComment).toHaveBeenCalledTimes(0);
+    fireEvent.change(input, { target: { value: "a new comment" } });
+    fireEvent.keyDown(input, { keyCode: 13, shiftKey: true });
+    expect(spySetComment).toHaveBeenCalledTimes(0);
+    fireEvent.keyDown(input, { keyCode: 13 });
+    expect(spySetComment).toHaveBeenCalledTimes(1);
+});
+
+test("can delete comment", () => {
+    const { getByText } = render(
+        <TestDataContext>
+            <CommentDisplay commentId={1} />
+        </TestDataContext>
+    );
+    const button = getByText("Delete");
+    fireEvent.click(button);
+    expect(spyDeleteComment).toHaveBeenCalledTimes(1);
 });

@@ -53,9 +53,11 @@ const App = (): JSX.Element => {
 
     const addPost = () => {
         if (postInput) {
-            const maxId = posts.reduce((prev, curr) =>
-                prev.id > curr.id ? prev : curr
-            ).id;
+            const maxId = posts.length
+                ? posts.reduce((prev, curr) =>
+                      prev.id > curr.id ? prev : curr
+                  ).id
+                : 1;
 
             setPost({
                 message: postInput,
@@ -71,8 +73,8 @@ const App = (): JSX.Element => {
     };
 
     const handlePostInputSubmit = (e: FormEvent<HTMLFormElement>) => {
-        addPost();
         e.preventDefault();
+        addPost();
     };
 
     const handlePostItButtonClick = () => {

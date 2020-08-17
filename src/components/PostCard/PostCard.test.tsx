@@ -37,6 +37,8 @@ const testPost: Post = {
     liked: false,
 };
 
+const spySetComment = jest.fn();
+
 const TestDataContextProvider: FC<{ comments?: Comment[]; posts?: Post[] }> = ({
     comments,
     posts,
@@ -48,7 +50,7 @@ const TestDataContextProvider: FC<{ comments?: Comment[]; posts?: Post[] }> = ({
             users: [testUser],
             comments: comments || [],
             posts: posts || [testPost],
-            setComment: () => {},
+            setComment: spySetComment,
             setPost: () => {},
             deleteComment: () => {},
         }}
@@ -134,4 +136,18 @@ test("clicking 'like' toggles liked status", async () => {
     getByText("1 Like");
     fireEvent.click(likeButton);
     getByText("0 Likes");
+});
+
+test("can create comments", () => {
+    const { getByText, getByRole } = render(
+        <TestDataContextProvider>
+            <PostCard postId={1} />
+        </TestDataContextProvider>
+    );
+    const button = getByText("Comment");
+    fireEvent.click(button);
+    const input = getByRole("textbox");
+    fireEvent.change(input, { target: { value: "a new comment" } });
+    fireEvent.submit(input);
+    expect(spySetComment).toHaveBeenCalledTimes(1);
 });
