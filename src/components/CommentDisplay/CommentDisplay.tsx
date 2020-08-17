@@ -32,6 +32,11 @@ const StyledCommentCard = styled(Card)`
 
 const Actions = styled.div`
   color: ${({ theme }) => theme.colors.gray};
+  font-size: 1.2rem;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 1.6rem;
+  }
 `;
 
 interface CommentDisplayProps {
