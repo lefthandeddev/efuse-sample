@@ -1,15 +1,15 @@
 {
-  "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "targets": {
-          "esmodules": true
-        }
-      }
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "targets": {
+                    "esmodules": true
+                }
+            }
+        ],
+        "@babel/preset-react",
+        "@babel/preset-typescript"
     ],
-    "@babel/preset-react",
-    "@babel/preset-typescript"
-  ],
-  "plugins": ["babel-plugin-styled-components"]
+    "plugins": ["babel-plugin-styled-components"]
 }

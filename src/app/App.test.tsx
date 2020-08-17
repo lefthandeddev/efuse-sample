@@ -5,37 +5,38 @@ import { DataContext } from "../providers/DataProvider";
 import { User } from "src/api/dataApi";
 
 test("displays posts", async () => {
-  const { getByText } = render(
-    <DataContext.Provider
-      value={{
-        currentUser: {} as User,
-        users: [],
-        posts: [
-          {
-            id: 1,
-            userId: 1,
-            creationDate: new Date(),
-            message: "test message 1",
-            likes: 0,
-            liked: false,
-          },
-          {
-            id: 2,
-            userId: 1,
-            creationDate: new Date(),
-            message: "test message 2",
-            likes: 0,
-            liked: false,
-          },
-        ],
-        comments: [],
-        setPost: () => {},
-        setComment: () => {},
-      }}
-    >
-      <App />
-    </DataContext.Provider>
-  );
-  getByText("test message 1");
-  getByText("test message 2");
+    const { getByText } = render(
+        <DataContext.Provider
+            value={{
+                currentUser: {} as User,
+                users: [],
+                posts: [
+                    {
+                        id: 1,
+                        userId: 1,
+                        creationDate: new Date(),
+                        message: "test message 1",
+                        likes: 0,
+                        liked: false,
+                    },
+                    {
+                        id: 2,
+                        userId: 1,
+                        creationDate: new Date(),
+                        message: "test message 2",
+                        likes: 0,
+                        liked: false,
+                    },
+                ],
+                comments: [],
+                setPost: () => {},
+                setComment: () => {},
+                deleteComment: () => {},
+            }}
+        >
+            <App />
+        </DataContext.Provider>
+    );
+    getByText("test message 1");
+    getByText("test message 2");
 });

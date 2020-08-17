@@ -10,7 +10,7 @@ test("css attributes get set to defaults", () => {
         "auto"
     );
     expect(container.firstChild).toHaveStyleRule("grid-template-rows", "auto");
-    expect(container.firstChild).toHaveStyleRule("justify-items", "stretch");
+    expect(container.firstChild).toHaveStyleRule("justify-content", "stretch");
     expect(container.firstChild).toHaveStyleRule("align-items", "stretch");
     expect(container.firstChild).toHaveStyleRule("column-gap", "0");
     expect(container.firstChild).toHaveStyleRule("row-gap", "0");
@@ -35,7 +35,7 @@ test("css attributes get set to values", () => {
         "grid-template-rows",
         "2rem 5px"
     );
-    expect(container.firstChild).toHaveStyleRule("justify-items", "end");
+    expect(container.firstChild).toHaveStyleRule("justify-content", "end");
     expect(container.firstChild).toHaveStyleRule("align-items", "center");
     expect(container.firstChild).toHaveStyleRule("column-gap", "5px");
     expect(container.firstChild).toHaveStyleRule("row-gap", "10px");
