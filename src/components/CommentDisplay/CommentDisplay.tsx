@@ -145,12 +145,13 @@ const CommentDisplay: FC<CommentDisplayProps> = ({
                                     <TextareaAutosize
                                         style={{
                                             width: "100%",
-                                            borderRadius: "0.5rem",
-                                            border: "none",
+                                            border: `2px solid ${themeContext.colors.blueLight}`,
                                             resize: "none",
-                                            fontSize: "1.4rem",
-                                            padding: "0.5rem",
+                                            fontSize: "inherit",
                                             boxSizing: "border-box",
+                                            backgroundColor: "inherit",
+                                            fontFamily: "inherit",
+                                            margin: "1rem 0",
                                         }}
                                         value={editInput}
                                         onChange={handleEditChange}
@@ -202,7 +203,13 @@ const CommentDisplay: FC<CommentDisplayProps> = ({
                                         </GridItem>
                                         <GridItem>
                                             <Button
-                                                color={themeContext.colors.gray}
+                                                color={
+                                                    edit
+                                                        ? themeContext.colors
+                                                              .blue
+                                                        : themeContext.colors
+                                                              .gray
+                                                }
                                                 kind="text"
                                                 icon={faPen}
                                                 onClick={handleEdit}
