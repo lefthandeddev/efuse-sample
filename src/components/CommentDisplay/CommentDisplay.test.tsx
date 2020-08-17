@@ -1,10 +1,5 @@
 import React, { FC } from "react";
-import {
-    render,
-    waitFor,
-    fireEvent,
-    waitForElementToBeRemoved,
-} from "test-utils";
+import { render, waitFor, fireEvent } from "test-utils";
 import CommentDisplay from ".";
 import date from "../../utils/date-utils";
 import { User, Comment } from "../../api/dataApi";
@@ -114,40 +109,55 @@ test("clicking 'like' toggles liked status", async () => {
         </DataProvider>
     );
 
-    await waitFor(() => queryByText(/0 Likes/));
+    await waitFor(() => queryByText("0 Likes"));
     const likeButton = getByText("Like");
     fireEvent.click(likeButton);
-    queryByText(/1 Like/);
+    queryByText("1 Like");
     fireEvent.click(likeButton);
-    queryByText(/0 Likes/);
+    queryByText("0 Likes");
 });
 
-test("can edit comment", () => {
-    const { getByText, getByRole } = render(
-        <TestDataContext>
+test("can edit comment", async () => {
+    mockFetchData.mockResolvedValue({
+        users: [testUser],
+        posts: [],
+        comments: [testComment],
+    });
+    const { getByText, getByRole, queryByRole } = render(
+        <DataProvider>
             <CommentDisplay commentId={1} />
-        </TestDataContext>
+        </DataProvider>
     );
-    const button = getByText("Edit");
+    const button = await waitFor(() => getByText("Edit"));
+    getByText("test comment 1");
     fireEvent.click(button);
     const input = getByRole("textbox");
     fireEvent.change(input, { target: { value: "" } });
     fireEvent.keyDown(input, { keyCode: 13 });
-    expect(spySetComment).toHaveBeenCalledTimes(0);
+    getByRole("textbox");
     fireEvent.change(input, { target: { value: "a new comment" } });
     fireEvent.keyDown(input, { keyCode: 13, shiftKey: true });
-    expect(spySetComment).toHaveBeenCalledTimes(0);
+    getByRole("textbox");
     fireEvent.keyDown(input, { keyCode: 13 });
-    expect(spySetComment).toHaveBeenCalledTimes(1);
+    const textBox = queryByRole("textbox");
+    expect(textBox).toBeNull();
+    getByText("a new comment");
 });
 
-test("can delete comment", () => {
-    const { getByText } = render(
-        <TestDataContext>
+test("can delete comment", async () => {
+    mockFetchData.mockResolvedValue({
+        users: [testUser],
+        posts: [],
+        comments: [testComment],
+    });
+    const { getByText, queryByText } = render(
+        <DataProvider>
             <CommentDisplay commentId={1} />
-        </TestDataContext>
+        </DataProvider>
     );
     const button = getByText("Delete");
+    await waitFor(() => getByText("test comment 1"));
     fireEvent.click(button);
-    expect(spyDeleteComment).toHaveBeenCalledTimes(1);
+    const comment = queryByText("test comment 1");
+    expect(comment).toBeNull();
 });

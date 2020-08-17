@@ -138,16 +138,20 @@ test("clicking 'like' toggles liked status", async () => {
     getByText("0 Likes");
 });
 
-test("can create comments", () => {
+test("can create comments", async () => {
+    mockFetchData.mockResolvedValue({
+        users: [testUser],
+        posts: [testPost],
+        comments: [],
+    });
     const { getByText, getByRole } = render(
-        <TestDataContextProvider>
+        <DataProvider>
             <PostCard postId={1} />
-        </TestDataContextProvider>
+        </DataProvider>
     );
     const button = getByText("Comment");
     fireEvent.click(button);
     const input = getByRole("textbox");
     fireEvent.change(input, { target: { value: "a new comment" } });
-    fireEvent.submit(input);
-    expect(spySetComment).toHaveBeenCalledTimes(1);
+    await waitFor(() => fireEvent.submit(input));
 });
