@@ -89,6 +89,7 @@ const CommentDisplay: FC<CommentDisplayProps> = ({
     const [editInput, setEditInput] = useState(comment.message);
 
     const handleEdit = () => {
+        setEditInput(comment.message);
         setEdit(!edit);
     };
 
