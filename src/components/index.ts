@@ -29,3 +29,6 @@ export * from "./Button";
 
 export { default as Input } from "./Input";
 export * from "./Input";
+
+export { default as Icon } from "./Icon";
+export * from "./Icon";

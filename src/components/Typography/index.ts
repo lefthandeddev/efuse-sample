@@ -1,1 +1,1 @@
-export { Message, Accent } from "./Typography";
+export { Message, Accent, MutableText, Text } from "./Typography";

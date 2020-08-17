@@ -7,6 +7,8 @@ import {
     Message,
     Accent,
     Button,
+    MutableText,
+    Text,
 } from "..";
 import styled, { ThemeContext } from "styled-components";
 import React, {
@@ -142,14 +144,12 @@ const CommentDisplay: FC<CommentDisplayProps> = ({
                                 </>
                             )}
                             <GridItem rowStart={1} colStart={2} justify="end">
-                                <div
-                                    style={{
-                                        color: themeContext.colors.gray,
-                                        fontSize: "1.2rem",
-                                    }}
+                                <Text
+                                    color={themeContext.colors.gray}
+                                    size="1.4rem"
                                 >
                                     {fromNow}
-                                </div>
+                                </Text>
                             </GridItem>
                             <GridItem rowStart={3} colSpan={2}>
                                 {edit ? (
@@ -170,20 +170,12 @@ const CommentDisplay: FC<CommentDisplayProps> = ({
                                         justify="start"
                                     >
                                         <GridItem align="center">
-                                            <div
-                                                style={{
-                                                    color: likes
-                                                        ? themeContext.colors
-                                                              .gray
-                                                        : themeContext.colors
-                                                              .grayLight,
-                                                }}
-                                            >
+                                            <MutableText mute={!likes}>
                                                 {`${likes} ${pluralize(
                                                     "Like",
                                                     likes
                                                 )} |`}
-                                            </div>
+                                            </MutableText>
                                         </GridItem>
                                         <GridItem>
                                             <Button

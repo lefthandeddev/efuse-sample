@@ -24,6 +24,9 @@ import {
     Message,
     Accent,
     Button,
+    Icon,
+    MutableText,
+    Text,
 } from "..";
 import styled, { ThemeContext } from "styled-components";
 import { Post } from "../../api/dataApi";
@@ -46,6 +49,14 @@ const CommentContainer = styled.div`
 
 const PostCardContentBottom = styled(CardContentBottom)`
     background-color: ${({ theme }) => theme.colors.light};
+`;
+
+const NameText = styled.h1`
+    font-size: 2.4rem;
+`;
+
+const Stats = styled.div`
+    color: ${({ theme }) => theme.colors.gray};
 `;
 
 const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
@@ -137,59 +148,38 @@ const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
                                 <Avatar src={user.avatar} />
                             </GridItem>
                             <GridItem colStart={2} align="end">
-                                <h1 style={{ fontSize: "2.4rem" }}>
-                                    {user.name}
-                                </h1>
+                                <NameText>{user.name}</NameText>
                             </GridItem>
                             <GridItem colStart={2} align="center">
                                 <Accent>
-                                    <FontAwesomeIcon
-                                        icon={faMapMarkerAlt}
-                                        style={{ marginRight: "8px" }}
-                                    />
+                                    <Icon icon={faMapMarkerAlt} />
                                     {user.location}
                                 </Accent>
                             </GridItem>
                         </>
                     )}
                     <GridItem colStart={2} align="start">
-                        <div
-                            style={{
-                                color: themeContext.colors.gray,
-                                fontSize: "1.2rem",
-                            }}
-                        >
+                        <Text color={themeContext.colors.gray} size="1.4rem">
                             {fromNow}
-                        </div>
+                        </Text>
                     </GridItem>
                     <GridItem colSpan={3}>
                         <Message>{message}</Message>
                     </GridItem>
                     <GridItem colSpan={2}>
-                        <div style={{ color: themeContext.colors.gray }}>
-                            <span
-                                style={{
-                                    color: likes
-                                        ? "inherit"
-                                        : themeContext.colors.grayLight,
-                                }}
-                            >
-                                {`${likes} ${pluralize("Like", likes)}`}
-                            </span>
+                        <Stats>
+                            <MutableText mute={!likes}>{`${likes} ${pluralize(
+                                "Like",
+                                likes
+                            )}`}</MutableText>
                             &nbsp;•&nbsp;
-                            <span
-                                style={{
-                                    color: postComments.length
-                                        ? "inherit"
-                                        : themeContext.colors.grayLight,
-                                }}
-                            >
-                                {`${postComments.length} ${pluralize(
-                                    "Comment",
-                                    postComments.length
-                                )}`}
-                            </span>
-                        </div>
+                            <MutableText mute={!postComments.length}>{`${
+                                postComments.length
+                            } ${pluralize(
+                                "Comment",
+                                postComments.length
+                            )}`}</MutableText>
+                        </Stats>
                     </GridItem>
                     <GridItem colStart={3} rowStart={2} justify="end">
                         <FontAwesomeIcon icon={faEllipsisH} />

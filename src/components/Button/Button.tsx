@@ -1,7 +1,7 @@
 import React, { FC, MouseEvent } from "react";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Icon } from "..";
 
 interface ButtonProps {
     onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
@@ -11,10 +11,6 @@ interface ButtonProps {
     kind?: "text" | "rounded";
     className?: "string";
 }
-
-const Icon = styled(FontAwesomeIcon)`
-    margin-right: 0.5rem;
-`;
 
 const Button: FC<ButtonProps> = ({
     color,
