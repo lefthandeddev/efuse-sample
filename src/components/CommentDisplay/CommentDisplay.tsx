@@ -24,6 +24,17 @@ import { useData } from "../../providers/DataProvider";
 import { faHeart, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import TextareaAutosize from "react-textarea-autosize";
 
+const TextArea = styled(TextareaAutosize)`
+    width: 100%;
+    border: 2px solid ${({ theme }) => theme.colors.blueLight};
+    resize: none;
+    font-size: inherit;
+    box-sizing: border-box;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 1rem 0;
+`;
+
 const StyledCommentCard = styled(Card)`
     background-color: ${({ theme }) => theme.colors.primary};
     box-shadow: none;
@@ -142,17 +153,7 @@ const CommentDisplay: FC<CommentDisplayProps> = ({
                             </GridItem>
                             <GridItem rowStart={3} colSpan={2}>
                                 {edit ? (
-                                    <TextareaAutosize
-                                        style={{
-                                            width: "100%",
-                                            border: `2px solid ${themeContext.colors.blueLight}`,
-                                            resize: "none",
-                                            fontSize: "inherit",
-                                            boxSizing: "border-box",
-                                            backgroundColor: "inherit",
-                                            fontFamily: "inherit",
-                                            margin: "1rem 0",
-                                        }}
+                                    <TextArea
                                         value={editInput}
                                         onChange={handleEditChange}
                                         autoFocus
