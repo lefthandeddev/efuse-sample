@@ -23,6 +23,7 @@ import {
   CardContentBottom,
   Message,
   Accent,
+  Button,
 } from "..";
 import styled, { ThemeContext } from "styled-components";
 import { Post } from "../../api/dataApi";
@@ -34,19 +35,8 @@ export interface PostCardProps {
   postId: number;
 }
 
-const Button = styled.button`
-  background: none;
-  border: none;
-  margin: 0;
-  padding: 0.4rem;
-  cursor: pointer;
-  font-size: 2rem;
-`;
-
 const Actions = styled.div`
-  > * {
-    margin-right: 1rem;
-  }
+  font-size: 2rem;
 `;
 
 const CommentContainer = styled.div`
@@ -66,6 +56,7 @@ const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
     setComment,
     currentUser,
   } = useData();
+
   const post: Post = posts.find(p => p.id === postId) || {
     id: -1,
     userId: -1,
@@ -104,6 +95,7 @@ const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
   };
 
   const handleCommentInputSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const maxId = comments.reduce((prev, curr) =>
       prev.id > curr.id ? prev : curr
     ).id;
@@ -118,8 +110,6 @@ const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
     });
     setCommentInput("");
     setShowCommentInput(false);
-
-    e.preventDefault();
   };
 
   useEffect(() => {
@@ -201,30 +191,34 @@ const PostCard: FC<PostCardProps> = ({ postId }): JSX.Element => {
         <GridContainer rows={["auto", "auto"]} rowGap="10px">
           <GridItem>
             <Actions>
-              <Button onClick={handleLike}>
-                <div
-                  style={{
-                    color: liked
-                      ? themeContext.colors.red
-                      : themeContext.colors.gray,
-                  }}
-                >
-                  <FontAwesomeIcon
+              <GridContainer
+                cols={["auto", "auto"]}
+                justify="start"
+                colGap="1rem"
+              >
+                <GridItem>
+                  <Button
+                    color={
+                      liked ? themeContext.colors.red : themeContext.colors.gray
+                    }
+                    kind="text"
                     icon={faHeart}
-                    style={{ marginRight: "0.5rem" }}
-                  />
-                  Like
-                </div>
-              </Button>
-              <Button onClick={handleShowCommentInput}>
-                <div style={{ color: themeContext.colors.gray }}>
-                  <FontAwesomeIcon
+                    onClick={handleLike}
+                  >
+                    Like
+                  </Button>
+                </GridItem>
+                <GridItem>
+                  <Button
+                    color={themeContext.colors.gray}
+                    kind="text"
                     icon={faCommentDots}
-                    style={{ marginRight: "0.5rem" }}
-                  />
-                  Comment
-                </div>
-              </Button>
+                    onClick={handleShowCommentInput}
+                  >
+                    Comment
+                  </Button>
+                </GridItem>
+              </GridContainer>
             </Actions>
           </GridItem>
           {showCommentInput && (

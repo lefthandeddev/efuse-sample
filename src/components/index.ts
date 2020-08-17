@@ -23,3 +23,6 @@ export { default as CommentDisplay } from "./CommentDisplay";
 export * from "./CommentDisplay";
 
 export * from "./Typography";
+
+export { default as Button } from "./Button";
+export * from "./Button";

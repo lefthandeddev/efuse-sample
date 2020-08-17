@@ -1,4 +1,4 @@
-import React, { FormEvent, useState, FC, MouseEvent } from "react";
+import React, { FormEvent, useState, useContext } from "react";
 import {
   PostCard,
   GridContainer,
@@ -7,14 +7,11 @@ import {
   GridItem,
   CardContentBottom,
   Avatar,
+  Button,
 } from "../components";
-import styled from "styled-components";
+import styled, { ThemeContext } from "styled-components";
 import { useData } from "../providers/DataProvider";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPhotoVideo,
-  IconDefinition,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPhotoVideo } from "@fortawesome/free-solid-svg-icons";
 
 const StyledApp = styled.div`
   max-width: ${({ theme }) => {
@@ -36,43 +33,6 @@ const Feed = styled(GridContainer)`
   }
 `;
 
-const ButtonComp: FC<
-  {
-    icon?: IconDefinition;
-    onClick: (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
-  } & React.DetailedHTMLProps<
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
-    HTMLButtonElement
-  >
-> = ({ icon, onClick, children, className }) => {
-  const Icon = styled(FontAwesomeIcon)`
-    margin-right: 0.5rem;
-  `;
-  return (
-    <button className={className} onClick={onClick}>
-      {icon && <Icon icon={icon} />}
-      {children}
-    </button>
-  );
-};
-
-const Button = styled(ButtonComp)`
-  color: ${({ theme }) => theme.colors.white};
-  background-color: ${({ theme }) => theme.colors.blueLight};
-  border-radius: 0.5rem;
-  padding: 0.8rem 1.6rem;
-  border: none;
-  cursor: pointer;
-  margin: 0;
-  font-family: ${({ theme }) => theme.fontFamily};
-  font-size: 1.6rem;
-`;
-
-const RoundedButton = styled(Button)`
-  border-radius: 25px;
-  background-color: ${({ theme }) => theme.colors.black};
-`;
-
 const Input = styled.input`
   width: 100%;
   box-sizing: border-box;
@@ -84,6 +44,8 @@ const Input = styled.input`
 const App = (): JSX.Element => {
   const { posts, currentUser, setPost } = useData();
   const [postInput, setPostInput] = useState("");
+
+  const themeContext = useContext(ThemeContext);
 
   const handlePostInputChange = (e: FormEvent<HTMLInputElement>) => {
     setPostInput(e.currentTarget.value);
@@ -142,10 +104,23 @@ const App = (): JSX.Element => {
             <CardContentBottom>
               <GridContainer cols={["auto", "auto"]}>
                 <GridItem>
-                  <RoundedButton icon={faPhotoVideo}>Photo/Video</RoundedButton>
+                  <Button
+                    kind="rounded"
+                    bgColor={themeContext.colors.black}
+                    color={themeContext.colors.white}
+                    icon={faPhotoVideo}
+                  >
+                    Photo/Video
+                  </Button>
                 </GridItem>
                 <GridItem justify="end">
-                  <Button onClick={handlePostItButtonClick}>Post It</Button>
+                  <Button
+                    bgColor={themeContext.colors.blueLight}
+                    color={themeContext.colors.white}
+                    onClick={handlePostItButtonClick}
+                  >
+                    Post It
+                  </Button>
                 </GridItem>
               </GridContainer>
             </CardContentBottom>

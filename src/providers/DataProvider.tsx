@@ -14,6 +14,7 @@ export interface IDataContext {
   comments: Comment[];
   setPost: (post: Post) => void;
   setComment: (comment: Comment) => void;
+  deleteComment: (comment: Comment) => void;
 }
 
 export const DataContext = createContext<IDataContext>({} as IDataContext);
@@ -42,6 +43,13 @@ const DataProvider: FC = ({ children }) => {
     else setComments([...comments, comment]);
   };
 
+  const deleteComment = (comment: Comment) => {
+    const index = comments.indexOf(comment);
+    const arr = [...comments];
+    arr.splice(index, 1);
+    setComments(arr);
+  };
+
   useEffect(() => {
     const getData = async () => {
       const data = await fetchData();
@@ -63,6 +71,7 @@ const DataProvider: FC = ({ children }) => {
         comments: comments,
         setPost,
         setComment,
+        deleteComment,
       }}
     >
       {children}

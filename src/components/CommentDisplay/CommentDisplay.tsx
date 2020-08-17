@@ -6,27 +6,32 @@ import {
   CardContent,
   Message,
   Accent,
+  Button,
 } from "..";
 import styled, { ThemeContext } from "styled-components";
-import React, { FC, useState, useEffect, useContext, MouseEvent } from "react";
+import React, {
+  FC,
+  useState,
+  useEffect,
+  useContext,
+  ChangeEvent,
+  KeyboardEvent,
+} from "react";
 import { Comment } from "../../api/dataApi";
 import date from "../../utils/date-utils";
 import pluralize from "pluralize";
 import { useData } from "../../providers/DataProvider";
-
-const Button = styled.button`
-  background: none;
-  border: none;
-  margin: 0;
-  padding: 0.4rem;
-  cursor: pointer;
-  font-size: 1.6rem;
-`;
+import { faHeart, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import TextareaAutosize from "react-textarea-autosize";
 
 const StyledCommentCard = styled(Card)`
   background-color: ${({ theme }) => theme.colors.primary};
   box-shadow: none;
   border-radius: ${({ theme }) => theme.borderRadius};
+`;
+
+const Actions = styled.div`
+  color: ${({ theme }) => theme.colors.gray};
 `;
 
 interface CommentDisplayProps {
@@ -36,7 +41,7 @@ interface CommentDisplayProps {
 const CommentDisplay: FC<CommentDisplayProps> = ({
   commentId,
 }): JSX.Element => {
-  const { users, comments, setComment } = useData();
+  const { users, comments, setComment, deleteComment } = useData();
   const comment: Comment = comments.find(c => c.id === commentId) || {
     id: -1,
     userId: -1,
@@ -54,12 +59,37 @@ const CommentDisplay: FC<CommentDisplayProps> = ({
 
   const user = users.find(u => u.id === comment.userId);
 
-  const handleLike = (e: MouseEvent) => {
+  const handleLike = () => {
     setComment({
       ...comment,
       liked: !comment.liked,
       likes: comment.liked ? comment.likes - 1 : comment.likes + 1,
     });
+  };
+
+  const [edit, setEdit] = useState(false);
+  const [editInput, setEditInput] = useState(comment.message);
+
+  const handleEdit = () => {
+    setEdit(!edit);
+  };
+
+  const handleEditChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setEditInput(e.currentTarget.value);
+  };
+
+  const handleEditKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.keyCode == 13 && e.shiftKey == false) {
+      e.preventDefault();
+      if (editInput) {
+        setEdit(false);
+        setComment({ ...comment, message: editInput });
+      }
+    }
+  };
+
+  const handleDelete = () => {
+    deleteComment(comment);
   };
 
   useEffect(() => {
@@ -104,34 +134,81 @@ const CommentDisplay: FC<CommentDisplayProps> = ({
                 </div>
               </GridItem>
               <GridItem rowStart={3} colSpan={2}>
-                <Message>{message}</Message>
-              </GridItem>
-              <GridItem rowStart={4} align="end">
-                <div style={{ color: themeContext.colors.gray }}>
-                  <span
+                {edit ? (
+                  <TextareaAutosize
                     style={{
-                      color: likes
-                        ? themeContext.colors.gray
-                        : themeContext.colors.grayLight,
+                      width: "100%",
+                      borderRadius: "0.5rem",
+                      border: "none",
+                      resize: "none",
+                      fontSize: "1.4rem",
+                      padding: "0.5rem",
+                      boxSizing: "border-box",
                     }}
+                    value={editInput}
+                    onChange={handleEditChange}
+                    autoFocus
+                    onKeyDown={handleEditKeyDown}
+                  />
+                ) : (
+                  <Message>{message}</Message>
+                )}
+              </GridItem>
+              <GridItem rowStart={4} colSpan={2}>
+                <Actions>
+                  <GridContainer
+                    cols={["auto", "auto", "auto", "auto"]}
+                    justify="start"
                   >
-                    {`${likes} ${pluralize("Like", likes)}`}
-                  </span>{" "}
-                  |{" "}
-                  <span>
-                    <Button onClick={handleLike}>
+                    <GridItem align="center">
                       <div
                         style={{
-                          color: liked
-                            ? themeContext.colors.red
-                            : themeContext.colors.gray,
+                          color: likes
+                            ? themeContext.colors.gray
+                            : themeContext.colors.grayLight,
                         }}
                       >
-                        Like
+                        {`${likes} ${pluralize("Like", likes)} |`}
                       </div>
-                    </Button>
-                  </span>
-                </div>
+                    </GridItem>
+                    <GridItem>
+                      <Button
+                        color={
+                          liked
+                            ? themeContext.colors.red
+                            : themeContext.colors.gray
+                        }
+                        kind="text"
+                        icon={faHeart}
+                        onClick={handleLike}
+                      >
+                        Like
+                      </Button>
+                      &nbsp;|
+                    </GridItem>
+                    <GridItem>
+                      <Button
+                        color={themeContext.colors.gray}
+                        kind="text"
+                        icon={faPen}
+                        onClick={handleEdit}
+                      >
+                        Edit
+                      </Button>
+                      &nbsp;|
+                    </GridItem>
+                    <GridItem>
+                      <Button
+                        color={themeContext.colors.gray}
+                        kind="text"
+                        icon={faTrash}
+                        onClick={handleDelete}
+                      >
+                        Delete
+                      </Button>
+                    </GridItem>
+                  </GridContainer>
+                </Actions>
               </GridItem>
             </GridContainer>
           </CardContent>
